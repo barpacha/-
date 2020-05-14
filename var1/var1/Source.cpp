@@ -7,7 +7,8 @@ ProperFraction cin_obj()
 {
 	char string_numbers[100];
 	int i = 0;
-	std::cin.get();
+	if (std::cin.peek() == 10)
+		std::cin.get();
 	while (string_numbers[i - 1] != 10 && i < 100)
 		std::cin.get(string_numbers[i++]);
 	int sign = 1;
@@ -69,15 +70,17 @@ ProperFraction cin_obj()
 		if (index < 100) index++;
 		else return ProperFraction();
 	}
-	end:
-	ProperFraction new_obj(integer, numerator, denomerator*sign);
+end:
+	if (denomerator == 0) integer *= sign;
+	else denomerator *= sign;
+	ProperFraction new_obj(integer, numerator, denomerator);
 	return new_obj;
 
 }
 
 void main()
 {
-	ProperFraction *pobj = nullptr;
+	BST<ProperFraction> tree;
 	while (true)
 	{
 		std::cout << "select command:\n1: add\n2: remove\n3: save file\n4: load file\n5: +\n6: -\n7: *\n8: /" << std::endl << std::endl;
@@ -86,10 +89,23 @@ void main()
 		switch (cmd)
 		{
 		case 1:
-			pobj = new ProperFraction;
+		{
+			int key;
+			std::cout << "key(int): ";
+			std::cin >> key;
+			std::cout << "fraction: ";
+			tree.add(cin_obj(),key);
+		}
 			break;
 		case 2:
-			delete pobj;
+		{
+			int key;
+			std::cout << "key(int): ";
+			std::cin >> key;
+			std::cout << "delete: ";
+			std::cout << tree.get(key) << std::endl;
+			tree.remove(key);
+		}
 			break;
 		case 3:
 		{
